@@ -1,0 +1,238 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Intro to Jujutsu VCS</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo">rpreston.me</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li class="active"><a href="intro_to_jujutsu_vcs.html">Intro to Jujutsu VCS</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<span class="date">October 28, 2025</span>
+									<h1>Intro to Jujutsu VCS</h1>
+									<p>A better alternative to git, with
+									features such as an operation log, automatic
+									rebase and conflict resolution, and even an
+									"undo"!</p>
+								</header>
+								<div class="box alt">
+									<div class="row gtr-50 gtr-uniform" style="display: flex; justify-content: center;">
+										<div class="col-3">
+											<span class="image fit">
+												<img src="https://raw.githubusercontent.com/jj-vcs/jj/refs/heads/main/docs/images/jj-logo.svg" alt="" />
+											</span>
+										</div>
+									</div>
+								</div>
+								<h2>What is Jujutsu?</h2>
+								<p>If you've ever programmed anything, then there's a good chance that you have used <a href="https://github.com/">github</a> to store your code. Github is based on the <a href="https://git-scm.com/">git</a> VCS (version control system), so it's what most people are familiar with — but there <i>are</i> other options out there! <a href="https://www.mercurial-scm.org/">Mercurial</a>, <a href="https://darcs.net/">Darcs</a>, and the list goes on... but the newest arrival to the scene is <a href="https://jj-vcs.github.io/jj/">Jujutsu</a>!</p>
+								<p>Jujutsu stands out with really nice features of its own, while also building upon the design choices of those previously listed version control systems (speed from Git, revsets from Mercurial, and conflicts as first-class objects from Darcs).</p>
+								<h2>Why use it?</h2>
+								<p>If I had to pick my <b>top</b> reasons to give jj (jujutsu) a try, it would be</p>
+								<ol>
+									<li>It's compatible<b>*</b> with Git, so the barrier to entry is extremely low. You can even use it <a href="https://jj-vcs.github.io/jj/latest/git-compatibility/#colocated-jujutsugit-repos">alongside</a> git at the same time! Every time you have a simple change, just try doing it with jj first - whenever you find something you don't know how to do, just switch back to git and try again later after reading the docs.</li>
+									<li>You can <a href="https://jj-vcs.github.io/jj/latest/cli-reference/#jj-undo">undo</a>! To me, this is THE single best thing about jj because it gives you the confidence to really experiment with the tool. Whether it's your first rebase or you just had a typo and targeted the wrong revision, you can just "jj undo" and try again. If want to undo <i>several</i> changes, then you can either "jj undo" multiple times or simply use "jj op restore" to <a href="https://jj-vcs.github.io/jj/latest/operation-log/#introduction">restore</a> the repo to how it looked at a specific point.</li>
+								</ol>
+								<p><i><b>*mostly</b> compatible. You can't create new tags or use git hooks (<a href="https://jj-vcs.github.io/jj/latest/git-compatibility/">among other things</a>), but it's easy enough to run a one-off git command every now and then when you need to.</i></p>
+								<h2>Getting started</h2>
+								<h3>Example</h3>
+								<p>I learn best by example, so lets showcase a simple usage example before diving into explaining everything; I'll take a git repo and use jj (Jujutsu's CLI) to create and push a new change. Jujutsu's docs have a similar example on their <a href="https://jj-vcs.github.io/jj/latest/tutorial/">tutorial page</a>.</p>
+								<div class="box alt">
+									<div class="row gtr-50 gtr-uniform" style="display: flex; justify-content: center;">
+										<div class="col-8">
+											<span class="image fit">
+												<img src="../images/jujutsu-example.png" alt="" />
+											</span>
+										</div>
+									</div>
+								</div>
+								<h4>Initializing jj</h4>
+								<p>To get started using jj with my git repo, I ran "jj git init --colocate". This configures Jujutsu to import and export from and to the Git repo on every jj command automatically.</p>
+								<h4>jj status</h4>
+								<p>I then made some changes before running "jj status" (<a href="https://jj-vcs.github.io/jj/latest/cli-reference/#jj-status">alias 'st'</a>). This is similar to "git status" — it shows me my modified/added files — but it also shows me something new: my "working copy" and my "parent commit".</p>
+								<blockquote>This is the first big divergence from most version control systems that you have to wrap your head around: your working copy is automatically committed</blockquote>
+								<p>This means that git status is showing us two revisions: our current working copy commit and our parent commit. We can also see their respective identifiers (change id and commit id), associated bookmarks (git branches), and descriptions.</p>
+								<div class="box alt">
+									<div class="row gtr-50 gtr-uniform" style="display: flex; justify-content: center;">
+										<div class="col-8">
+											<span class="image fit">
+												<img src="../images/jujutsu-status-annotated.png" alt="" />
+											</span>
+										</div>
+									</div>
+								</div>
+								<p>Jujutsu uses change ids to distinguish their revisions, which don't change (even if the commits do). This allows you to have a consistent target, such as when you want to squash some changes into a revision then modify its description. You may have noticed that in those aforementioned identifiers, some of the letters are highlighted — this is its shortest unique substring, which you can use to refer to it.</p>
+								<ul>
+									<li>Another method of referencing revisions is via the "@" symbol. This always points to your current working copy, and you can refer to that revision's parent or child changes with "-" and "+" signs, respectively (@-, @+, @---, etc.).</li>
+								</ul>
+								<h4>jj diff</h4>
+								<p>I like viewing a diff of my changes before 'finalizing them' (creating a new revision so I don't accidentally amend unrelated changes), which you can do with the <a href="https://jj-vcs.github.io/jj/latest/cli-reference/#jj-diff">jj diff command</a>.</p>
+								<p>Below, I've put the default and difft diffs beside each other for the change from before (using the bookmark name instead of the change id):</p>
+											<span class="image fit">
+												<img src="../images/jujutsu-diff.png" alt="" />
+											</span>
+
+								<h4>jj describe</h4>
+								<p>"jj describe" is how you add descriptions to your revisions. Some items of note are below:</p>
+								<ul>
+									<li>Many commands have shorthands in jj — "jj describe" --&gt; "jj desc"</li>
+									<li>Most commands will take a "-r" revision argument — if you don't provide one to "jj describe", it'll use "@" by default (the current working copy)</li>
+									<li>You can inline a description by using the "-m" flag — if omitted, it'll open up in your default editor.</li>
+								</ul>
+								<h4>Finalizing your changes</h4>
+								<p>You should always run "jj new" every time you finish a change — this prevents you from accidentally including unrelated changes, as any changes are always automatically amended into your working copy.</p>
+								<p>Once I've done that, I want to get my local changes into the "main" branch on my remote.</p>
+								<p>This branch already exists, so I want to:</p>
+								<ol>
+									<li>Move my local bookmark (branch) for "main" to the appropriate revision</li>
+									<li>Push my changes so that the remote bookmark updates to reflect my local one.</li>
+								</ol>
+								<p>I do this with "jj bookmark move"; specifically, I'm moving the "main" bookmark to my parent change ("@-").</p>
+								<pre><code>jj b m main -t @-</code></pre>
+								<blockquote>Note: your local bookmark will show an asterisk ("*") once you do this. It's just to signify that it's out of sync with the remote bookmark, to remind you of unpushed changes.</blockquote>
+								<p>To then push your local bookmark to the remote, you can just run "jj git push".</p>
+								<p>There are multiple options this command can take, but some useful ones are:</p>
+								<ul>
+									<li>"-N", "--allow-new" — Allow pushing new bookmarks</li>
+									<li>"-b", "--bookmark" — Push only this bookmark, or bookmarks matching a pattern (can be repeated)</li>
+									<ul>
+										<li>Use "glob:" prefix to select bookmarks by <a href="https://jj-vcs.github.io/jj/latest/revsets/#string-patterns">wildcard pattern</a>.</li>
+									</ul>
+									<li>"--deleted" — Push all deleted bookmarks</li>
+								</ul>
+								<h3>Git <--> Jujutsu Commands</h3>
+								<p>If you're coming from git, then Jujutsu's <a href="https://jj-vcs.github.io/jj/latest/git-comparison/">git command table</a> can be really helpful to look through.</p>
+								<h2>My Configuration</h2>
+								<p>Jujutsu's <a href="https://jj-vcs.github.io/jj/latest/config/">configuration file</a> can be edited with "jj config edit --user", and can find its path with "jj config path --user".</p>
+								<p>There are a lot of different options you can tweak, but here's what I personally use:</p>
+								<pre><code>[ui]
+# Disable all pagination, equivalent to using --no-pager
+paginate = "never"
+# Use Difftastic by default
+diff-formatter = ["difft", "--color=always", "$left", "$right"]
+
+[revset-aliases]
+# Used for jj tug
+"closest_bookmark(to)" = "heads(::to & bookmarks())"
+
+[aliases]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
+l = ["log", "-r", "@ | ancestors(trunk()..(visible_heads() & mine()), 2) | trunk()", "--limit", "10"]
+n = ["new"]
+e = ["edit"]
+a = ["abandon"]
+gi = ["git", "init", "--colocate"]
+
+[git]
+colocate = true
+auto-local-bookmark = true
+private-commits = '''description(glob:'private:*')'''
+
+[signing]
+behavior = "own"
+backend = "gpg"</code></pre>
+								<h3>[ui]</h3>
+								<p>The ui changes I made are disabling the pager, and using <a href="https://github.com/Wilfred/difftastic">difft</a> for my diffs. More information on using external diff tools can be found <a href="https://jj-vcs.github.io/jj/latest/config/#generating-diffs-by-external-command">here</a>.</p>
+								<h3>[revset-aliases]</h3>
+								<a href="https://jj-vcs.github.io/jj/latest/revsets/">Revsets</a> are an idea that Jujutsu took from Mercurial, and is just an expression that represents a set of revisions.
+								<p>This could be anything from every revision that you authored, to commits that are on a certain bookmark, to finding which commit has a specific change!</p>
+								<div class="box alt">
+									<div class="row gtr-50 gtr-uniform" style="display: flex; justify-content: center;">
+										<div class="col-6">
+											<span class="image fit">
+												<img src="../images/jujutsu-needle-haystack.png" alt="" />
+											</span>
+										</div>
+									</div>
+								</div>
+								<p>Jujutsu lets you define aliases to more complex revsets, of which I only have one in my config:
+								<pre><code>"closest_bookmark(to)" = "heads(::to & bookmarks())"</code></pre>
+								I use the above for "jj tug". "jj tug" is just a community-made alias to make it easier to move bookmarks, which I'll explain in the next section.</p>
+								<h3>[aliases]</h3>
+								<h4>jj tug</h4>
+								<p>First up is the "tug" alias.</p>
+								<pre><code>tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]</code></pre>
+								<p>Since Jujutsu doesn't automatically keep your branch up-to-date with your latest commits like Git does, you'll need to manually move your bookmarks if you append new changes to them. Rather than constantly typing "jj branch move &lt;branch&gt; --to @-", this alias lets you just type "jj tug". No need to type the branch name at all!</p>
+								<div class="box alt">
+									<div class="row gtr-50 gtr-uniform" style="display: flex; justify-content: center;">
+										<div class="col-8">
+											<span class="image fit">
+												<img src="../images/jujutsu-tug.png" alt="" />
+											</span>
+										</div>
+									</div>
+								</div>
+								<h4>Custom log revset</h4>
+								<p>"jj log" is a command you'll find yourself running quite a lot , so it makes sense to fine-tune this so that you only see what you care about. I personally took mine from Will Richardson's excellent post <a href="https://willhbr.net/2024/08/18/understanding-revsets-for-a-better-jj-log-output/">here</a> on jj log revsets.</p>
+								<pre><code>l = ["log", "-r", "@ | ancestors(trunk()..(visible_heads() & mine()), 2) | trunk()", "--limit", "10"]</code></pre>
+								<h4>Shorthands</h4>
+								<p>Below are some more "jj" commands that I frequently find myself using, so I've shortened them for convenience.</p>
+								<pre><code>n = ["new"]
+e = ["edit"]
+a = ["abandon"]
+gi = ["git", "init", "--colocate"]</code></pre>
+								<h3>[git]</h3>
+								<pre><code>colocate = true
+auto-local-bookmark = true
+private-commits = '''description(glob:'private:*')'''</code></pre>
+								<p>"auto-local-bookmark" lets you specify "jj new &lt;bookmark&gt;" instead of "jj new &lt;bookmark&gt;@&lt;remote&gt;" when you're checking out a remote bookmark.</p>
+								<p>The <a href="https://jj-vcs.github.io/jj/latest/config/#set-of-private-commits">private-commits</a> setting is the really interesting tidbit here though — it lets you provide a revset that Jujutsu will <b><i>refuse</i></b> to push. This is useful for if you're testing something locally and have temporarily hardcoded a token somewhere — just give it a description in line with this revset, then abandon that change once you're ready to push!</p>
+								<h3>[signing]</h3>
+								<p>Jujutsu supports <a href="https://jj-vcs.github.io/jj/latest/config/#commit-signing">commit signing</a> with either GPG or SSH signing keys — below is the setup for GPG signing:</p>
+								<pre><code>behavior = "own"
+backend = "gpg"</code></pre>
+								<h2>Other useful commands</h2>
+								<h3>jj absorb</h3>
+								<p><a href="https://jj-vcs.github.io/jj/latest/cli-reference/#jj-absorb">jj absorb</a> is essentially an 'auto-squash'; if you've made multiple unrelated changes in the same revision, then you can just run "jj absorb" rather than splitting them up and individually running "jj squash -u -t &lt;destination&gt;". It'll automatically try to squash them into mutable ancestors of the source revision ("@" by default) based on which lines were modified.</p>
+								<h3>jj duplicate</h3>
+								<p>Use <a href="https://jj-vcs.github.io/jj/latest/cli-reference/#jj-duplicate">jj duplicate</a> if you want to cherry-pick some changes. If you have <i>several</i> changes you'd like to cherry-pick, such as an entire branch, then you can use some revset operators. I commonly find myself using one of the below:
+								<pre><code>jj duplicate -r &lt;parent_branch&gt;..&lt;branch_to_cp&gt; -d &lt;target_branch&gt;
+jj duplicate -r &lt;first_commit&gt;::&lt;last_commit&gt; -d &lt;target_branch&gt;</code></pre></p>
+								<h2>Rebasing and Merge Conflicts</h2>
+								<p>I won't touch too much on <a href="https://jj-vcs.github.io/jj/latest/cli-reference/#jj-rebase">rebasing</a> and <a href="https://jj-vcs.github.io/jj/latest/tutorial/#conflicts">merge conflicts</a> since this post is long enough as-is, but just know that Jujutsu will automatically propagate your changes to descendant revisions for you — and that it's as nice as it sounds. Try it out!</p>
+								<ul class="actions" style="display: flex; justify-content: center;">
+									<li><a href="../index.html" class="button primary icon solid fa-home">Home</a><li>
+								</ul>
+							</section>
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Ryan Preston</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+			</div>
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+	</body>
+</html>
